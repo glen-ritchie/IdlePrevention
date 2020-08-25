@@ -29,20 +29,23 @@ namespace IdlePrevention
 
         public IdleContext()
         {
-            // Disable at start
-            enabled = false;
+            // Enable at start
+            enabled = true;
 
             // Configure timer for 50 seconds, as the shortest windows screen idle time is 60 seconds.
             idleTimer = new Timer();
             idleTimer.Interval = 50 * 1000;
             idleTimer.Tick += TimerElapsed;
 
+            // Start immediately
+            idleTimer.Start();
+
             // Setup the menu
             trayIcon = new NotifyIcon()
             {
                 Icon = Resources.AppIcon,
                 ContextMenu = new ContextMenu(new MenuItem[] {
-                new MenuItem("Enable Idle Prevention", ToggleIdle),
+                new MenuItem("Disable Idle Prevention", ToggleIdle ),
                 new MenuItem("Quit Program", Quit)
             }),
                 Visible = true
@@ -59,7 +62,7 @@ namespace IdlePrevention
             MenuItem menu = (MenuItem)sender;
 
             if (enabled)
-            { 
+            {
                 // Turn off
                 menu.Text = "Enable Idle Prevention";
                 idleTimer.Stop();
